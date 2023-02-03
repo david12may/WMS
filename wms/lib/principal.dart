@@ -51,7 +51,7 @@ class _PrincipalState extends State<Principal> {
       body: Center(
         child: Container(
           height: 450,
-          width: 320,
+          width: 250,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 60),
             child: Column(
@@ -105,6 +105,9 @@ class _PrincipalState extends State<Principal> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                             text: "Inventario",
                                           ),
                                         ],
@@ -168,6 +171,9 @@ class _PrincipalState extends State<Principal> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                             text: "Funcion",
                                           ),
                                         ],
@@ -236,6 +242,9 @@ class _PrincipalState extends State<Principal> {
                                         text: TextSpan(
                                           children: [
                                             TextSpan(
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                               text: "Scann",
                                             ),
                                           ],
