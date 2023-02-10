@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wms/bd/prodcutos.dart';
 import 'package:wms/qr.dart';
 import 'package:wms/scann.dart';
 import 'inventario.dart';
@@ -259,6 +260,72 @@ class _PrincipalState extends State<Principal> {
                         ],
                       ),
                     ),
+                    const Spacer(),
+                    Container(
+                      height: 150,
+                      width: 120,
+                      child: Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              _bd(context);
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 100,
+                                  width: 100,
+                                  child: Image.asset(
+                                    'assets/codigo.png',
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                    ),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    width: 100,
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 26, 62, 99),
+                                      borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10),
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          offset: const Offset(0, 10),
+                                          blurRadius: 50,
+                                          color: Colors.transparent,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              text: "Database",
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -287,6 +354,13 @@ class _PrincipalState extends State<Principal> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Scann()),
+    );
+  }
+
+  void _bd(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => bd()),
     );
   }
 }
