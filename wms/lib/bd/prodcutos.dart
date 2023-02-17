@@ -63,10 +63,14 @@ class _bdState extends State<bd> {
                   ElevatedButton(
                       onPressed: () {
                         String cod = codigo_barra.text;
-                        Navigator.of(context)
-                            .push(MaterialPageRoute<Null>(builder: (context) {
-                          return new conexion(cod);
-                        }));
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              content: conexion(cod),
+                            );
+                          },
+                        );
                       },
                       child: Text("Consultar"))
                 ],

@@ -69,11 +69,14 @@ class _InventarioState extends State<Inventario> {
                                         color: Color.fromARGB(255, 0, 200, 255),
                                         onPressed: () {
                                           String cod = codigo_barra.text;
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute<Null>(
-                                                  builder: (context) {
-                                            return new conexion(cod);
-                                          }));
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                content: conexion(cod),
+                                              );
+                                            },
+                                          );
                                         },
                                         icon: Icon(Icons.add_circle),
                                       ),
@@ -215,9 +218,14 @@ class _InventarioState extends State<Inventario> {
       if (!mounted) return;
 
       String cod = codigo_barra.text;
-      Navigator.of(context).push(MaterialPageRoute<Null>(builder: (context) {
-        return new conexion(cod);
-      }));
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: conexion(cod),
+          );
+        },
+      );
     } on PlatformException {
       qrCode = 'Failed to get platform version.';
     }

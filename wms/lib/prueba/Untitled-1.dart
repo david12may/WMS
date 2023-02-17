@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -49,27 +52,82 @@ class _conexionState extends State<conexion> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: DoneDataMap == null
-          ? CupertinoActivityIndicator()
-          : AlertDialog(
-              title: Text(
-                DoneDataMap!['descripcion'].toString(),
-              ),
-              content: Column(
-                children: [
-                  Text(
-                    DoneDataMap!['id'].toString(),
-                  ),
-                  Text(
-                    DoneDataMap!['precio'].toString(),
-                  ),
-                  Text(
-                    DoneDataMap!['codigo_barras'].toString(),
-                  ),
-                ],
+    if (DoneDataMap == null) {
+      return Container(
+          width: 300,
+          height: 200,
+          color: Colors.white,
+          child: Center(
+              child: Text(
+            "El producto que ha ingresado, no existe",
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
+          )));
+    } else {
+      return Container(
+        width: 300,
+        height: 200,
+        color: Colors.white,
+        child: Column(
+          children: [
+            Text(
+              DoneDataMap!['descripcion'].toString(),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
             ),
-    );
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Id producto: ",
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  DoneDataMap!['id'].toString(),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "Precio: ",
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  DoneDataMap!['precio'].toString(),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "Cod. Barra: ",
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  DoneDataMap!['codigo_barras'].toString(),
+                ),
+              ],
+            ),
+            TextButton(onPressed: () {}, child: Text("Add Prod."))
+          ],
+        ),
+      );
+    }
   }
 }
