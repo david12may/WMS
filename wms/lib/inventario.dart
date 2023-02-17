@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:wms/principal.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:wms/prueba/Untitled-1.dart';
 
 class Inventario extends StatefulWidget {
   const Inventario({Key? key}) : super(key: key);
@@ -13,8 +14,10 @@ class Inventario extends StatefulWidget {
 
 class _InventarioState extends State<Inventario> {
   String qrCode = '';
+  TextEditingController codigo_barra = TextEditingController(text: "");
   @override
   Widget build(BuildContext context) {
+    TextEditingController codigo_barra = TextEditingController(text: "");
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 213, 214, 215),
         appBar: AppBar(
@@ -52,8 +55,8 @@ class _InventarioState extends State<Inventario> {
                                     height: 30,
                                     width: 150,
                                     child: Center(
-                                      child: Text(
-                                        qrCode,
+                                      child: TextField(
+                                        controller: codigo_barra,
                                       ),
                                     ),
                                   ),
@@ -64,7 +67,14 @@ class _InventarioState extends State<Inventario> {
                                       child: IconButton(
                                         iconSize: 30,
                                         color: Color.fromARGB(255, 0, 200, 255),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          String cod = codigo_barra.text;
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute<Null>(
+                                                  builder: (context) {
+                                            return new conexion(cod);
+                                          }));
+                                        },
                                         icon: Icon(Icons.add_circle),
                                       ),
                                     ),
@@ -118,6 +128,7 @@ class _InventarioState extends State<Inventario> {
                         Container(
                           child: Row(
                             children: [
+                              Text(qrCode),
                               Text(
                                 "PRODUCTOS",
                                 style: TextStyle(fontSize: 17),
@@ -203,9 +214,10 @@ class _InventarioState extends State<Inventario> {
 
       if (!mounted) return;
 
-      setState(() {
-        this.qrCode = qrCode;
-      });
+      String cod = codigo_barra.text;
+      Navigator.of(context).push(MaterialPageRoute<Null>(builder: (context) {
+        return new conexion(cod);
+      }));
     } on PlatformException {
       qrCode = 'Failed to get platform version.';
     }

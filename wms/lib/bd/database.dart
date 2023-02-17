@@ -25,8 +25,8 @@ class _conexionHTTPState extends State<conexionHTTP> {
     var datos = json.decode(response.body);
     print(datos);
     var registros = <produc>[];
-    for (var item in datos) {
-      print(item);
+    for (datos in datos) {
+      registros.add(produc.fromJson(datos));
     }
     return registros;
   }
@@ -61,36 +61,20 @@ class _conexionHTTPState extends State<conexionHTTP> {
                 height: 280,
                 padding: const EdgeInsets.all(8),
                 margin: EdgeInsets.symmetric(horizontal: 2),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  elevation: 4,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Column(
-                      children: [
-                        Container(
-                            padding: EdgeInsets.all(12),
-                            child: Text(
-                              data[index].descripcion,
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.cyan[800]),
-                            )),
-                        Text(
-                          data[index].id,
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.cyan[800]),
-                        ),
-                        Text('Precio: ' + data[index].precio),
-                        Text('Codigo de barras: ' + data[index].codigo_barras),
-                        Text(data[index].error),
-                      ],
-                    ),
+                child: Container(
+                  child: Column(
+                    children: [
+                      Container(
+                          padding: EdgeInsets.all(12),
+                          child: Text(
+                            data[index].descripcion,
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.cyan[800]),
+                          )),
+                      Text('Precio: ' + data[index].precio),
+                    ],
                   ),
                 ),
               ),

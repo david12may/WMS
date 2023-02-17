@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../prueba/Untitled-1.dart';
 import 'database.dart';
 
 class bd extends StatefulWidget {
@@ -64,7 +65,7 @@ class _bdState extends State<bd> {
                         String cod = codigo_barra.text;
                         Navigator.of(context)
                             .push(MaterialPageRoute<Null>(builder: (context) {
-                          return new conexionHTTP(cod);
+                          return new conexion(cod);
                         }));
                       },
                       child: Text("Consultar"))

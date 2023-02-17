@@ -1,8 +1,8 @@
 class produc {
-  final String id;
+  final int id;
   final String descripcion;
   final String precio;
-  final String codigo_barras;
+  final int codigo_barras;
   final String error;
 
   produc({

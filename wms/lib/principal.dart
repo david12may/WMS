@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wms/bd/prodcutos.dart';
+import 'package:wms/prueba/Untitled-1.dart';
 import 'package:wms/qr.dart';
 import 'package:wms/scann.dart';
 import 'inventario.dart';
