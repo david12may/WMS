@@ -1,82 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../prueba/Untitled-1.dart';
-import 'database.dart';
-
-class bd extends StatefulWidget {
-  bd({Key? key}) : super(key: key);
-
+class ClassA extends StatefulWidget {
   @override
-  State<bd> createState() => _bdState();
+  _ClassAState createState() => _ClassAState();
 }
 
-class _bdState extends State<bd> {
+class _ClassAState extends State<ClassA> {
+  List<String> _miLista = [];
+  Map<String, int> _contador = {};
+
   @override
   void initState() {
     super.initState();
+    _cargarListaDesdeSharedPrefs();
+  }
+
+  Future<void> _cargarListaDesdeSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? listaGuardada = prefs.getStringList('miLista');
+    if (listaGuardada != null) {
+      setState(() {
+        _miLista = listaGuardada;
+        _contador = _contarElementos(_miLista);
+      });
+    }
+  }
+
+  Future<void> _guardarListaEnSharedPrefs(List<String> lista) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('miLista', lista);
+  }
+
+  Map<String, int> _contarElementos(List<String> lista) {
+    Map<String, int> contador = {};
+    lista.forEach((elemento) {
+      contador[elemento] = (contador[elemento] ?? 0) + 1;
+    });
+    return contador;
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController codigo_barra = TextEditingController(text: "");
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          backgroundColor: Color.fromARGB(255, 213, 214, 215),
-          appBar: AppBar(
-            backgroundColor: Color.fromARGB(255, 72, 91, 133),
-            elevation: 5,
-            centerTitle: true,
-            title: Text("Inventario"),
+    return ListView.builder(
+      itemCount: _contador.length,
+      itemBuilder: (BuildContext context, int index) {
+        String elementoActual = _contador.keys.elementAt(index);
+        int cantidad = _contador[elementoActual] ?? 0;
+        return ListTile(
+          title: Row(
+            children: [
+              Expanded(
+                child: Text(elementoActual),
+              ),
+              Text(cantidad.toString()),
+            ],
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Container(
-              padding: const EdgeInsets.all(25),
-              height: 240,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(0, 10),
-                    blurRadius: 50,
-                    color: Colors.transparent,
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: codigo_barra,
-                    decoration: InputDecoration(labelText: "Clave:"),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        String cod = codigo_barra.text;
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: conexion(cod),
-                            );
-                          },
-                        );
-                      },
-                      child: Text("Consultar"))
-                ],
-              ),
-            ),
-          )),
+        );
+      },
     );
   }
 }

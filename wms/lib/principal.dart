@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:wms/bd/prodcutos.dart';
 import 'package:wms/prueba/Untitled-1.dart';
+import 'package:wms/prueba/appBar.dart';
+import 'package:wms/prueba/noti.dart';
 import 'package:wms/qr.dart';
 import 'package:wms/scann.dart';
 import 'inventario.dart';
 
 class Principal extends StatefulWidget {
-  Principal({Key? key}) : super(key: key);
+  String uss;
+  String api;
+
+  Principal(this.uss, this.api, {Key? key}) : super(key: key);
 
   @override
   State<Principal> createState() => _PrincipalState();
@@ -18,12 +23,12 @@ class _PrincipalState extends State<Principal> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 213, 214, 215),
       appBar: AppBar(
-        toolbarHeight: 110,
+        toolbarHeight: 120,
         backgroundColor: Colors.transparent,
         elevation: 20,
         flexibleSpace: ClipPath(
           child: Container(
-            height: 150,
+            height: 200,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
@@ -35,16 +40,28 @@ class _PrincipalState extends State<Principal> {
                     end: Alignment.bottomRight,
                     colors: [
                       Color.fromARGB(255, 1, 26, 82),
-                      Color.fromARGB(255, 0, 32, 65),
+                      Color.fromARGB(255, 1, 26, 82),
                     ])),
-            child: Center(
-              child: Text(
-                'WMS',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 40.0),
+              child: Column(
+                children: [
+                  Text(
+                    'WMS',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Bienvenido: ${widget.uss}",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -313,7 +330,7 @@ class _PrincipalState extends State<Principal> {
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                               ),
-                                              text: "Database",
+                                              text: "Fecha",
                                             ),
                                           ],
                                         ),
@@ -338,9 +355,10 @@ class _PrincipalState extends State<Principal> {
   }
 
   void _inventario(BuildContext context) {
+    String a = "${widget.api}";
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Inventario()),
+      MaterialPageRoute(builder: (context) => Inventario(a)),
     );
   }
 
@@ -361,7 +379,7 @@ class _PrincipalState extends State<Principal> {
   void _bd(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => bd()),
+      MaterialPageRoute(builder: (context) => Hora()),
     );
   }
 }

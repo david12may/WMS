@@ -1,179 +1,140 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wms/principal.dart';
 
-class Inicio extends StatefulWidget {
-  const Inicio({Key? key}) : super(key: key);
+class SignIn extends StatefulWidget {
+  const SignIn({super.key});
 
   @override
-  State<Inicio> createState() => _InicioState();
+  State<SignIn> createState() => _SignInState();
 }
 
-class _InicioState extends State<Inicio> {
+class _SignInState extends State<SignIn> {
+  Map<String, dynamic>? dataMap;
+  Map<String, dynamic>? DoneDataMap;
+  var userController = TextEditingController();
+  var passwordController = TextEditingController();
+
+  late SharedPreferences prefs;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 280,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        flexibleSpace: ClipPath(
-          child: Container(
-            height: 300,
-            width: 400,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(160),
-                bottomRight: Radius.circular(160),
-              ),
-              color: Color.fromARGB(255, 26, 62, 99),
+        body: Stack(
+      children: <Widget>[
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                Color.fromARGB(255, 1, 26, 82),
+                Color.fromARGB(255, 0, 32, 65),
+              ])),
+          child: CircleAvatar(
+            child: Image.asset(
+              'assets/codigo.png',
+              scale: 3,
+              width: 300,
             ),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 65.0, horizontal: 95),
-              child: Container(
-                height: 150,
-                width: 150,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(65, 91, 110, 120),
-                        blurRadius: 5.0, // soften the shadow
-                        spreadRadius: 5.0, //extend the shadow
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(100),
-                    color: Colors.white),
+            radius: 100,
+            backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          ),
+        ),
+        Transform.translate(
+          offset: Offset(0, -40),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                margin: const EdgeInsets.only(
+                    left: 20, right: 20, top: 260, bottom: 20),
                 child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Image.asset(
-                    'assets/codigo.png',
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
+                  child: Form(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        TextFormField(
+                          controller: userController,
+                          decoration: InputDecoration(labelText: "Usuario:"),
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        TextFormField(
+                          controller: passwordController,
+                          decoration: InputDecoration(labelText: "Contraseña"),
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        ButtonBar(children: [
+                          ElevatedButton(
+                            onPressed: () => _login(context),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text("Iniciar Sesión"),
+                              ],
+                            ),
+                          ),
+                        ]),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
         ),
-      ),
-      backgroundColor: Color.fromARGB(255, 234, 234, 234),
-      body: ListView(
-        children: [
-          Center(
-            child: Container(
-                child: Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Container(
-                    width: 300,
-                    height: 300,
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            blurRadius: 15.0, // soften the shadow
-                            spreadRadius: 3.0, //extend the shadow
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(35),
-                        color: Color.fromARGB(255, 255, 255, 255)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 40),
-                      child: Column(
-                        children: [
-                          Container(
-                            child: Text("Usuario"),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 1.0, // soften the shadow
-                                  spreadRadius: 1.0, //extend the shadow
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
-                            ),
-                            height: 50,
-                            width: 250,
-                            child: Center(
-                                child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: TextField(),
-                            )),
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Container(
-                            child: Text("Contraseña"),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 1.0, // soften the shadow
-                                  spreadRadius: 1.0, //extend the shadow
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
-                            ),
-                            height: 50,
-                            width: 250,
-                            child: Center(
-                                child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: TextField(),
-                            )),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Container(
-                    height: 50,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Color.fromARGB(255, 26, 62, 99),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        _principal(context);
-                      },
-                      child: Text(
-                        "Loguin",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )),
-          ),
-        ],
-      ),
-    );
+      ],
+    ));
   }
-}
 
-void _principal(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => Principal()),
-  );
+  Future<void> _login(BuildContext context) async {
+    final email = userController.text;
+    final password = passwordController.text;
+
+    final response = await http.post(
+      Uri.parse("https://dev.soferp.com/app/login?database_id=1"),
+      body: {'email': email, 'password': password},
+    );
+
+    if (response.statusCode == 200) {
+      print(DoneDataMap);
+      dataMap = jsonDecode(response.body);
+      DoneDataMap = dataMap;
+      // Token de acceso devuelto por el servidor
+
+      final String uss = DoneDataMap!["usuario"].toString();
+      final String api = DoneDataMap!["api_key"].toString();
+
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => Principal(uss, api)));
+    } else {
+      print("Usuario incorrecto");
+      print('Response body: ${response.body}');
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Error de inicio de sesión'),
+          content: Text('Las credenciales ingresadas son incorrectas'),
+          actions: <Widget>[],
+        ),
+      );
+    }
+  }
 }

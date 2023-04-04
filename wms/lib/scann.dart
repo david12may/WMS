@@ -1,59 +1,136 @@
 import 'package:flutter/material.dart';
 
-class Scann extends StatefulWidget {
-  @override
-  _ScannState createState() => _ScannState();
+class MiObjeto {
+  final String titulo;
+  final String descripcion;
+
+  MiObjeto({required this.titulo, required this.descripcion});
 }
 
-class _ScannState extends State<Scann> {
-  final myController = TextEditingController();
-
+class Scann extends StatelessWidget {
   @override
-  void initState() {
-    super.initState();
-
-    myController.addListener(_printLatestValue);
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Ejemplo setState',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MiWidget(),
+    );
   }
+}
 
+class MiWidget extends StatefulWidget {
   @override
-  void dispose() {
-    myController.dispose();
-    super.dispose();
-  }
+  _MiWidgetState createState() => _MiWidgetState();
+}
 
-  _printLatestValue() {
-    print("Second text field: ${myController.text}");
-  }
+class _MiWidgetState extends State<MiWidget> {
+  List<MiObjeto> _miLista = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 213, 214, 215),
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 72, 91, 133),
-        elevation: 5,
-        centerTitle: true,
-        title: Text('Retrieve Text Input'),
+        title: Text('Ejemplo setState'),
+      ),
+      body: ListView.builder(
+        itemCount: _miLista.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(_miLista[index].titulo),
+            subtitle: Text(_miLista[index].descripcion),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  VistaParaAgregarObjeto(agregarObjeto: agregarObjeto),
+            ),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  void agregarObjeto(MiObjeto objeto) {
+    setState(() {
+      _miLista.add(objeto);
+    });
+  }
+}
+
+class VistaParaAgregarObjeto extends StatefulWidget {
+  final Function agregarObjeto;
+
+  VistaParaAgregarObjeto({required this.agregarObjeto});
+
+  @override
+  _VistaParaAgregarObjetoState createState() => _VistaParaAgregarObjetoState();
+}
+
+class _VistaParaAgregarObjetoState extends State<VistaParaAgregarObjeto> {
+  final _formKey = GlobalKey<FormState>();
+  final _tituloController = TextEditingController();
+  final _descripcionController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Agregar objeto'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Container(
-            height: 320,
-            width: 250,
-            decoration: BoxDecoration(color: Colors.white),
-            child: Column(
-              children: <Widget>[
-                TextField(
-                  onChanged: (text) {
-                    print("First text field: $text");
-                  },
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                controller: _tituloController,
+                decoration: InputDecoration(
+                  labelText: 'Título',
                 ),
-                TextField(
-                  controller: myController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'El título es requerido';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _descripcionController,
+                decoration: InputDecoration(
+                  labelText: 'Descripción',
                 ),
-              ],
-            ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'La descripción es requerida';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    final objeto = MiObjeto(
+                      titulo: _tituloController.text,
+                      descripcion: _descripcionController.text,
+                    );
+                    widget.agregarObjeto(objeto);
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text('Agregar'),
+              ),
+            ],
           ),
         ),
       ),

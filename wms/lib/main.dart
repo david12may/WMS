@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:wms/principal.dart';
+import 'package:wms/prueba/noti.dart';
 
 import 'loguin.dart';
 
@@ -14,8 +15,9 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-void main() {
+void main() async {
   HttpOverrides.global = MyHttpOverrides();
+
   runApp(const MyApp());
 }
 
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      home: Inicio(),
+      home: SignIn(),
     );
   }
 }
