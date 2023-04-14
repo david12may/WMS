@@ -10,6 +10,7 @@ import 'package:wms/principal.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:wms/prueba/Untitled-1.dart';
+import 'package:wms/prueba/appBar.dart';
 
 import 'bd/lista_cache.dart';
 
@@ -46,10 +47,10 @@ class _InventarioState extends State<Inventario> {
     var now = DateTime.now();
     var formatter = DateFormat('yyyy-MM-dd');
     String formattedDate = formatter.format(now);
-    String a = widget.a;
+    String as = widget.a;
     String O = formattedDate;
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Enviar(a, O)));
+        context, MaterialPageRoute(builder: (context) => custionario(as)));
   }
 
   Map<String, int> _contarElementos(List<String> lista) {
@@ -73,7 +74,7 @@ class _InventarioState extends State<Inventario> {
       child: Scaffold(
           backgroundColor: Color.fromARGB(255, 213, 214, 215),
           appBar: AppBar(
-            backgroundColor: Color.fromARGB(255, 72, 91, 133),
+            backgroundColor: Color.fromARGB(255, 1, 26, 82),
             elevation: 5,
             centerTitle: true,
             title: Text("Inventario"),

@@ -9,9 +9,14 @@ import 'package:wms/inventario.dart';
 
 class Enviar extends StatefulWidget {
   String O;
-  String a;
+  String as;
 
-  Enviar(this.a, this.O, {Key? key}) : super(key: key);
+  String em;
+  String su;
+  String al;
+
+  Enviar(this.as, this.O, this.al, this.em, this.su, {Key? key})
+      : super(key: key);
 
   @override
   State<Enviar> createState() => _EnviarState();
@@ -25,10 +30,29 @@ class _EnviarState extends State<Enviar> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final myList = prefs.getStringList('miLista');
     List<String>? listaGuardada = prefs.getStringList('miLista');
+
+    List<String> myItems =
+        List<String>.from(prefs.getStringList('miLista') ?? []);
+    Map<String, dynamic> jsonMap = {
+      'count': myItems.length,
+      'items': myItems,
+    };
+    String jsonString = json.encode(jsonMap);
+
     Map<String, dynamic> mapa = {'concepto': listaGuardada};
 
     final dartList = List<String>.from(myList!);
-    final mappedList = dartList.map((item) => {'concepto:': item}).toList();
+    final mappedList = dartList
+        .map((item) => {
+              "concepto": item,
+              "producto_id": 31,
+              "unidad_id": 1,
+              "cantidad": 10,
+              "costo": 1,
+              "total": 2,
+              "importe": 1
+            })
+        .toList();
 
     for (final item in mappedList) {
       final json = jsonEncode(item);
@@ -36,25 +60,15 @@ class _EnviarState extends State<Enviar> {
         String listaJSON = jsonEncode(listaGuardada);
 
         final url = Uri.parse(
-            'https://dev.soferp.com/app/inventarios_fisicos?api_key=${widget.a}');
+            'https://dev.soferp.com/app/inventarios_fisicos?api_key=${widget.as}');
         final headers = {'Content-Type': 'application/json'};
         final data = {
-          "empresa_id": 70,
-          "sucursal_id": 6,
-          "almacen_id": 9,
+          "empresa_id": "${widget.em}",
+          "sucursal_id": "${widget.al}",
+          "almacen_id": "${widget.su}",
           "fecha": "${widget.O}",
           "tipo_aplicacion": 1,
-          "detalles": [
-            {
-              "concepto": "$mappedList",
-              "producto_id": 31,
-              "unidad_id": 1,
-              "cantidad": 2,
-              "costo": 1,
-              "total": 2,
-              "importe": 1
-            }
-          ]
+          "detalles": mappedList,
         };
 
         final body = jsonEncode(data);
@@ -62,7 +76,7 @@ class _EnviarState extends State<Enviar> {
         final response = await http.post(url, headers: headers, body: body);
 
         if (response.statusCode == 200) {
-          String a = widget.a;
+          String a = widget.as;
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => Inventario(a)));
           ScaffoldMessenger.of(context).showSnackBar(
@@ -79,6 +93,7 @@ class _EnviarState extends State<Enviar> {
           _borrarD();
           print(mapa);
           print(mappedList);
+
           print('Datos enviados con éxito');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -92,7 +107,7 @@ class _EnviarState extends State<Enviar> {
               ),
             ),
           );
-          String a = widget.a;
+          String a = widget.as;
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => Inventario(a)));
           print('Error al enviar datos: ${response.statusCode}');

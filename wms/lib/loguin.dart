@@ -65,6 +65,7 @@ class _SignInState extends State<SignIn> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         TextFormField(
+                          keyboardType: TextInputType.emailAddress,
                           controller: userController,
                           decoration: InputDecoration(labelText: "Usuario:"),
                         ),

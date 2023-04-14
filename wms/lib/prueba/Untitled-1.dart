@@ -47,9 +47,9 @@ class _conexionState extends State<conexion> {
         print(DoneDataMap);
         _sabe();
       });
-      String app = widget.app;
+      String a = widget.app;
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Inventario(app)));
+          context, MaterialPageRoute(builder: (context) => Inventario(a)));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('El producto se ha ingresado correctamente'),
@@ -63,12 +63,12 @@ class _conexionState extends State<conexion> {
       );
       FlutterRingtonePlayer.play(
         fromAsset: "assets/noti.wav",
-        volume: 0.1,
+        volume: 0.4,
       );
     } else {
-      String app = widget.app;
+      String a = widget.app;
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Inventario(app)));
+          context, MaterialPageRoute(builder: (context) => Inventario(a)));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('El producto que ha ingresado, no existe'),
@@ -81,8 +81,8 @@ class _conexionState extends State<conexion> {
         ),
       );
       FlutterRingtonePlayer.play(
-        fromAsset: "assets/error.",
-        volume: 0.1,
+        fromAsset: "assets/error.mp3",
+        volume: 0.4,
       );
     }
   }
