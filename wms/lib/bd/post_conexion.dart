@@ -8,14 +8,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wms/inventario.dart';
 
 class Enviar extends StatefulWidget {
-  String O;
   String as;
 
-  String em;
-  String su;
-  String al;
+  String sucursal;
+  String empresa;
+  String almacen;
 
-  Enviar(this.as, this.O, this.al, this.em, this.su, {Key? key})
+  Enviar(this.as, this.sucursal, this.empresa, this.almacen, {Key? key})
       : super(key: key);
 
   @override
@@ -55,6 +54,10 @@ class _EnviarState extends State<Enviar> {
         .toList();
 
     for (final item in mappedList) {
+      var now = DateTime.now();
+      var formatter = DateFormat('yyyy-MM-dd');
+      String hora = formatter.format(now);
+
       final json = jsonEncode(item);
       if (listaGuardada != null) {
         String listaJSON = jsonEncode(listaGuardada);
@@ -63,10 +66,10 @@ class _EnviarState extends State<Enviar> {
             'https://dev.soferp.com/app/inventarios_fisicos?api_key=${widget.as}');
         final headers = {'Content-Type': 'application/json'};
         final data = {
-          "empresa_id": "${widget.em}",
-          "sucursal_id": "${widget.al}",
-          "almacen_id": "${widget.su}",
-          "fecha": "${widget.O}",
+          "empresa_id": "${widget.empresa}",
+          "sucursal_id": "${widget.sucursal}",
+          "almacen_id": "${widget.almacen}",
+          "fecha": hora,
           "tipo_aplicacion": 1,
           "detalles": mappedList,
         };
@@ -77,8 +80,13 @@ class _EnviarState extends State<Enviar> {
 
         if (response.statusCode == 200) {
           String a = widget.as;
+          String aid = widget.sucursal;
+          String empresa = widget.empresa;
+          String almacen = widget.almacen;
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Inventario(a)));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Inventario(a, aid, empresa, almacen)));
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Los datos fueron enviado correcta mente'),
@@ -93,6 +101,7 @@ class _EnviarState extends State<Enviar> {
           _borrarD();
           print(mapa);
           print(mappedList);
+          print(data);
 
           print('Datos enviados con éxito');
         } else {
@@ -108,9 +117,15 @@ class _EnviarState extends State<Enviar> {
             ),
           );
           String a = widget.as;
+          String aid = widget.sucursal;
+          String empresa = widget.empresa;
+          String almacen = widget.almacen;
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Inventario(a)));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Inventario(a, aid, empresa, almacen)));
           print('Error al enviar datos: ${response.statusCode}');
+          print(data);
         }
       }
     }

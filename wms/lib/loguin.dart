@@ -110,8 +110,8 @@ class _SignInState extends State<SignIn> {
     final password = passwordController.text;
 
     final response = await http.post(
-      Uri.parse("https://dev.soferp.com/app/login?database_id=1"),
-      body: {'email': email, 'password': password},
+      Uri.parse("https://dev.soferp.com/app/cajeros/login"),
+      body: {'usuario': email, 'password': password},
     );
 
     if (response.statusCode == 200) {
@@ -120,14 +120,21 @@ class _SignInState extends State<SignIn> {
       DoneDataMap = dataMap;
       // Token de acceso devuelto por el servidor
 
-      final String uss = DoneDataMap!["usuario"].toString();
+      final String uss = DoneDataMap!["contacto"].toString();
       final String api = DoneDataMap!["api_key"].toString();
+      final String aid = DoneDataMap!["cajero"]["sucursal_id"].toString();
+      final String empresa = DoneDataMap!["cajero"]["empresa_id"].toString();
+      final String almacen = DoneDataMap!["cajero"]["almacen_id"].toString();
 
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => Principal(uss, api)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  Principal(uss, api, aid, empresa, almacen)));
     } else {
       print("Usuario incorrecto");
       print('Response body: ${response.body}');
+      print(DoneDataMap!["cajero"]["empresa_id"].toString());
       showDialog(
         context: context,
         builder: (context) => AlertDialog(

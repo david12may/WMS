@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wms/bd/prodcutos.dart';
 import 'package:wms/prueba/Untitled-1.dart';
-import 'package:wms/prueba/appBar.dart';
+
 import 'package:wms/prueba/noti.dart';
 import 'package:wms/qr.dart';
 import 'package:wms/scann.dart';
@@ -10,8 +10,13 @@ import 'inventario.dart';
 class Principal extends StatefulWidget {
   String uss;
   String api;
+  String aid;
+  String empresa;
+  String almacen;
 
-  Principal(this.uss, this.api, {Key? key}) : super(key: key);
+  Principal(this.uss, this.api, this.aid, this.empresa, this.almacen,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<Principal> createState() => _PrincipalState();
@@ -54,7 +59,7 @@ class _PrincipalState extends State<Principal> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 8),
                   Text(
                     "Bienvenido: ${widget.uss}",
                     style: TextStyle(
@@ -356,9 +361,13 @@ class _PrincipalState extends State<Principal> {
 
   void _inventario(BuildContext context) {
     String a = "${widget.api}";
+    String aid = "${widget.aid}";
+    String empresa = widget.empresa;
+    String almacen = widget.almacen;
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Inventario(a)),
+      MaterialPageRoute(
+          builder: (context) => Inventario(a, aid, empresa, almacen)),
     );
   }
 

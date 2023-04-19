@@ -10,13 +10,17 @@ import 'package:wms/principal.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:wms/prueba/Untitled-1.dart';
-import 'package:wms/prueba/appBar.dart';
 
 import 'bd/lista_cache.dart';
 
 class Inventario extends StatefulWidget {
   String a;
-  Inventario(this.a, {Key? key}) : super(key: key);
+  String sucursal;
+  String empresa;
+  String almacen;
+
+  Inventario(this.a, this.sucursal, this.empresa, this.almacen, {Key? key})
+      : super(key: key);
 
   @override
   State<Inventario> createState() => _InventarioState();
@@ -48,9 +52,19 @@ class _InventarioState extends State<Inventario> {
     var formatter = DateFormat('yyyy-MM-dd');
     String formattedDate = formatter.format(now);
     String as = widget.a;
-    String O = formattedDate;
+    String sucursal = widget.sucursal;
+    String empresa = widget.empresa;
+    String almacen = widget.almacen;
+
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => custionario(as)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => Enviar(
+                  as,
+                  sucursal,
+                  empresa,
+                  almacen,
+                )));
   }
 
   Map<String, int> _contarElementos(List<String> lista) {
@@ -124,11 +138,15 @@ class _InventarioState extends State<Inventario> {
                                           onPressed: () {
                                             String cod = codigo_barra.text;
                                             String app = widget.a;
+                                            String aid = widget.sucursal;
+                                            String empresa = widget.empresa;
+                                            String almacen = widget.almacen;
                                             Navigator.pushReplacement(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        conexion(cod, app)));
+                                                        conexion(cod, app, aid,
+                                                            empresa, almacen)));
                                           },
                                           icon: Icon(Icons.add_circle),
                                         ),
@@ -263,14 +281,14 @@ class _InventarioState extends State<Inventario> {
 
       String cod = qrCode;
       String app = widget.a;
+      String aid = widget.sucursal;
+      String empresa = widget.empresa;
+      String almacen = widget.almacen;
 
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => conexion(
-                    cod,
-                    app,
-                  )));
+              builder: (context) => conexion(cod, app, aid, empresa, almacen)));
     } on PlatformException {
       qrCode = 'Failed to get platform version.';
     }

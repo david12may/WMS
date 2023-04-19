@@ -17,8 +17,12 @@ import 'package:wms/prueba/noti.dart';
 class conexion extends StatefulWidget {
   String cod;
   String app;
+  String aid;
+  String empresa;
+  String almacen;
 
-  conexion(this.cod, this.app, {Key? key}) : super(key: key);
+  conexion(this.cod, this.app, this.aid, this.empresa, this.almacen, {Key? key})
+      : super(key: key);
 
   @override
   State<conexion> createState() => _conexionState();
@@ -48,8 +52,13 @@ class _conexionState extends State<conexion> {
         _sabe();
       });
       String a = widget.app;
+      String aid = widget.aid;
+      String empresa = widget.empresa;
+      String almacen = widget.almacen;
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Inventario(a)));
+          context,
+          MaterialPageRoute(
+              builder: (context) => Inventario(a, aid, empresa, almacen)));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('El producto se ha ingresado correctamente'),
@@ -67,8 +76,13 @@ class _conexionState extends State<conexion> {
       );
     } else {
       String a = widget.app;
+      String aid = widget.aid;
+      String empresa = widget.empresa;
+      String almacen = widget.almacen;
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Inventario(a)));
+          context,
+          MaterialPageRoute(
+              builder: (context) => Inventario(a, aid, empresa, almacen)));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('El producto que ha ingresado, no existe'),
@@ -139,9 +153,13 @@ class _conexionState extends State<conexion> {
       );
       _saveList();
       String a = widget.app;
+      String aid = widget.aid;
+      String empresa = widget.empresa;
+      String almacen = widget.almacen;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Inventario(a)),
+        MaterialPageRoute(
+            builder: (context) => Inventario(a, aid, empresa, almacen)),
       );
     });
   }
