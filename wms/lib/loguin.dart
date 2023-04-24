@@ -16,10 +16,22 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   Map<String, dynamic>? dataMap;
   Map<String, dynamic>? DoneDataMap;
+  final _formKey = GlobalKey<FormState>();
   var userController = TextEditingController();
   var passwordController = TextEditingController();
+  final _focusNode1 = FocusNode();
+  final _focusNode2 = FocusNode();
 
   late SharedPreferences prefs;
+
+  @override
+  void dispose() {
+    userController.dispose();
+    passwordController.dispose();
+    _focusNode1.dispose();
+    _focusNode2.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +79,34 @@ class _SignInState extends State<SignIn> {
                         TextFormField(
                           keyboardType: TextInputType.emailAddress,
                           controller: userController,
+                          focusNode: _focusNode1,
                           decoration: InputDecoration(labelText: "Usuario:"),
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) {
+                            _focusNode1.unfocus();
+                            FocusScope.of(context).requestFocus(_focusNode2);
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Por favor ingrese el campo 1';
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(
                           height: 40,
                         ),
                         TextFormField(
                           controller: passwordController,
+                          focusNode: _focusNode2,
                           decoration: InputDecoration(labelText: "Contraseña"),
+                          onFieldSubmitted: (_) => _login(context),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Por favor ingrese el campo 2';
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(
                           height: 40,
@@ -106,6 +138,7 @@ class _SignInState extends State<SignIn> {
   }
 
   Future<void> _login(BuildContext context) async {
+    final _formKey = GlobalKey<FormState>();
     final email = userController.text;
     final password = passwordController.text;
 
@@ -131,10 +164,21 @@ class _SignInState extends State<SignIn> {
           MaterialPageRoute(
               builder: (context) =>
                   Principal(uss, api, aid, empresa, almacen)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Viendos $uss'),
+          backgroundColor: Colors.blue.shade700,
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      );
     } else {
       print("Usuario incorrecto");
       print('Response body: ${response.body}');
-      print(DoneDataMap!["cajero"]["empresa_id"].toString());
+
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
